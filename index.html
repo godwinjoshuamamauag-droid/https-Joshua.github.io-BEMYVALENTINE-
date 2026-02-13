@@ -10,29 +10,27 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: #ffe4e6; /* Soft Pink Background */
+            min-height: 100vh;
+            background-color: #ffe4e6;
             font-family: 'Arial', sans-serif;
             margin: 0;
-            overflow: hidden; /* Prevents scrollbars when button moves */
+            overflow-x: hidden;
+            padding: 20px;
         }
 
         .container {
             text-align: center;
-            position: relative;
+            max-width: 600px;
         }
 
         h1 {
-            color: #be123c; /* Deep Red Text */
+            color: #be123c;
             font-size: 2.5rem;
-            margin-bottom: 20px;
         }
 
         img {
-            width: 300px;
-            height: auto;
+            width: 250px;
             border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
 
@@ -41,6 +39,7 @@
             gap: 20px;
             justify-content: center;
             align-items: center;
+            height: 150px; /* Space for the growing button */
         }
 
         button {
@@ -49,84 +48,233 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.2s;
+            font-weight: bold;
+            transition: transform 0.2s ease; /* Smooth growing */
         }
 
         #yesBtn {
-            background-color: #22c55e; /* Green */
+            background-color: #22c55e;
             color: white;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        #yesBtn:hover {
-            transform: scale(1.1);
-            background-color: #16a34a;
+            z-index: 10; /* Keeps it above everything as it grows */
         }
 
         #noBtn {
-            background-color: #ef4444; /* Red */
+            background-color: #ef4444;
             color: white;
-            font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            /* Important for the movement logic */
-            position: relative; 
+            position: relative;
         }
 
+        /* The Letter Styling */
+        #letter {
+            display: none; /* Hidden by default */
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            color: #444;
+            line-height: 1.6;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <img id="mainImage" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmM2Z202aHJhaDczbzV2eXFjcGR5eGx0MzV4d3FjODU3bHhpbmx5dyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LDBuYzAwu8L4I/giphy.gif" alt="Puppy Eyes">
+        <img id="mainImage" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Y2ZzRyc2pueXJ3Y29ndWZ5ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/qUIm586Mm59ny/giphy.gif" alt="Puppy Eyes">
         
         <h1 id="mainText">Will you be my Valentine?</h1>
 
-        <div class="btn-container">
+        <div id="btnContainer" class="btn-container">
             <button id="yesBtn" onclick="acceptLove()">Yes</button>
             <button id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">No</button>
+        </div>
+
+        <div id="letter">
+            <h2 style="color: #be123c;">My Dearest [Her Name],</h2>
+            <p>Yippieee, you're my valentine now Bibin, I love you so much. Thank you for being the sweetest and cutest girlfriend, you're the best thing I could ever ask for.</p>
+            <p>I promise to make the 14th as special as you are. I love you! ❤️</p>
         </div>
     </div>
 
     <script>
+        let yesScale = 1; // Starting size
+        let noClicks = 0;
+
         function moveButton() {
             const noBtn = document.getElementById('noBtn');
-            
-            // Get the window dimensions
-            const windowWidth = window.innerWidth;
-            const windowHeight = window.innerHeight;
-            
-            // Get the button dimensions
-            const btnWidth = noBtn.offsetWidth;
-            const btnHeight = noBtn.offsetHeight;
+            const yesBtn = document.getElementById('yesBtn');
 
-            // Calculate random positions ensuring the button stays within screen
-            // We subtract the button size to ensure it doesn't go off the edge
-            const newX = Math.random() * (windowWidth - btnWidth);
-            const newY = Math.random() * (windowHeight - btnHeight);
-
-            // Apply the new position
+            // 1. Move the No Button
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             noBtn.style.position = 'absolute';
-            noBtn.style.left = newX + 'px';
-            noBtn.style.top = newY + 'px';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+
+            // 2. Make the Yes Button Bigger
+            yesScale += 0.15; // Grows by 15% each time
+            yesBtn.style.transform = `scale(${yesScale})`;
         }
 
         function acceptLove() {
             const mainImage = document.getElementById('mainImage');
             const mainText = document.getElementById('mainText');
+            const btnContainer = document.getElementById('btnContainer');
+            const letter = document.getElementById('letter');
+
+            // Change visuals
+            mainImage.src = "<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #ffe4e6;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: #be123c;
+            font-size: 2.5rem;
+        }
+
+        img {
+            width: 250px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            height: 150px; /* Space for the growing button */
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s ease; /* Smooth growing */
+        }
+
+        #yesBtn {
+            background-color: #22c55e;
+            color: white;
+            z-index: 10; /* Keeps it above everything as it grows */
+        }
+
+        #noBtn {
+            background-color: #ef4444;
+            color: white;
+            position: relative;
+        }
+
+        /* The Letter Styling */
+        #letter {
+            display: none; /* Hidden by default */
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            color: #444;
+            line-height: 1.6;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img id="mainImage" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3Y2ZzRyc2pueXJ3Y29ndWZ5ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/qUIm586Mm59ny/giphy.gif" alt="Puppy Eyes">
+        
+        <h1 id="mainText">Will you be my Valentine?</h1>
+
+        <div id="btnContainer" class="btn-container">
+            <button id="yesBtn" onclick="acceptLove()">Yes</button>
+            <button id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">No</button>
+        </div>
+
+        <div id="letter">
+            <h2 style="color: #be123c;">My Dearest [Her Name],</h2>
+            <p>I am so incredibly happy you said yes! You make every day feel like a celebration, and I couldn't imagine spending Valentine's Day with anyone else.</p>
+            <p>I promise to make the 14th as special as you are. I love you! ❤️</p>
+        </div>
+    </div>
+
+    <script>
+        let yesScale = 1; // Starting size
+        let noClicks = 0;
+
+        function moveButton() {
             const noBtn = document.getElementById('noBtn');
             const yesBtn = document.getElementById('yesBtn');
 
-            // 1. Change the image to a celebration GIF
-            // Current GIF: Cute bears hugging/kissing
-            mainImage.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJtOWc4dmZsMG9uZ2V4ZGs4dG14aG1kbG94eXJ5aGN3Y29ndWZ5ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/T86i6yDyOYz7J6dPhf/giphy.gif";
-            
-            // 2. Change the text
-            mainText.innerText = "Yay! See you on the 14th! ❤️";
+            // 1. Move the No Button
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
 
-            // 3. Hide the buttons
-            noBtn.style.display = 'none';
-            yesBtn.style.display = 'none';
+            // 2. Make the Yes Button Bigger
+            yesScale += 0.15; // Grows by 15% each time
+            yesBtn.style.transform = `scale(${yesScale})`;
+        }
+
+        function acceptLove() {
+            const mainImage = document.getElementById('mainImage');
+            const mainText = document.getElementById('mainText');
+            const btnContainer = document.getElementById('btnContainer');
+            const letter = document.getElementById('letter');
+
+            // Change visuals
+            mainImage.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJtOWc4dmZsMG9uZ2V4ZGs4dG14aG1kbG94eXJ5aGN3Y29ndWZ5ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/T86i6yDyOYz7J6dPhf/giphy.gif";
+            mainText.innerText = "Yay! See you soon! ❤️";
+            
+            // Hide buttons and show letter
+            btnContainer.style.display = 'none';
+            letter.style.display = 'block';
+        }
+    </script>
+</body>
+</html>";
+            mainText.innerText = "Yay! See you soon! ❤️";
+            
+            // Hide buttons and show letter
+            btnContainer.style.display = 'none';
+            letter.style.display = 'block';
         }
     </script>
 </body>
