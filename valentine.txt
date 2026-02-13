@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Be My Valentine?</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffe4e6; /* Soft Pink Background */
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            overflow: hidden; /* Prevents scrollbars when button moves */
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            color: #be123c; /* Deep Red Text */
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        img {
+            width: 300px;
+            height: auto;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #yesBtn {
+            background-color: #22c55e; /* Green */
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+            background-color: #16a34a;
+        }
+
+        #noBtn {
+            background-color: #ef4444; /* Red */
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            /* Important for the movement logic */
+            position: relative; 
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img id="mainImage" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmM2Z202aHJhaDczbzV2eXFjcGR5eGx0MzV4d3FjODU3bHhpbmx5dyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/LDBuYzAwu8L4I/giphy.gif" alt="Puppy Eyes">
+        
+        <h1 id="mainText">Will you be my Valentine?</h1>
+
+        <div class="btn-container">
+            <button id="yesBtn" onclick="acceptLove()">Yes</button>
+            <button id="noBtn" onmouseover="moveButton()" ontouchstart="moveButton()">No</button>
+        </div>
+    </div>
+
+    <script>
+        function moveButton() {
+            const noBtn = document.getElementById('noBtn');
+            
+            // Get the window dimensions
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            // Get the button dimensions
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+
+            // Calculate random positions ensuring the button stays within screen
+            // We subtract the button size to ensure it doesn't go off the edge
+            const newX = Math.random() * (windowWidth - btnWidth);
+            const newY = Math.random() * (windowHeight - btnHeight);
+
+            // Apply the new position
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = newX + 'px';
+            noBtn.style.top = newY + 'px';
+        }
+
+        function acceptLove() {
+            const mainImage = document.getElementById('mainImage');
+            const mainText = document.getElementById('mainText');
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+
+            // 1. Change the image to a celebration GIF
+            // Current GIF: Cute bears hugging/kissing
+            mainImage.src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJtOWc4dmZsMG9uZ2V4ZGs4dG14aG1kbG94eXJ5aGN3Y29ndWZ5ciZlcD12MV9naWZzX3NlYXJjaCZjdD1n/T86i6yDyOYz7J6dPhf/giphy.gif";
+            
+            // 2. Change the text
+            mainText.innerText = "Yay! See you on the 14th! ❤️";
+
+            // 3. Hide the buttons
+            noBtn.style.display = 'none';
+            yesBtn.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
